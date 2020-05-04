@@ -6,13 +6,14 @@ const CELL_CLEAR_BACKGROUND2 := Color(0) #Black
 var grid: GridContainer
 var next: GridContainer
 var number_of_cells := 200
-#onready var next := find_node("NextShape")
+
 
 signal button_pressed(button_name)
 
 func _ready() -> void:
 	grid = find_node("Grid")
 	next = find_node("NextShape")
+	
 	add_cells(grid, number_of_cells)
 	clear_cells(grid, CELL_CLEAR_BACKGROUND1)
 	clear_cells(next, CELL_CLEAR_BACKGROUND2)
