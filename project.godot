@@ -30,6 +30,10 @@ config/name="Tetron"
 run/main_scene="res://scenes/Main.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Shapes="*res://scenes/Shapes.tscn"
+
 [display]
 
 window/size/width=600
