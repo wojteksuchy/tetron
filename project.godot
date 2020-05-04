@@ -9,18 +9,12 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "",
-"class": "GitAPI",
-"language": "NativeScript",
-"path": "res://git_api.gdns"
-}, {
 "base": "Node",
 "class": "ShapeData",
 "language": "GDScript",
 "path": "res://scripts/ShapeData.gd"
 } ]
 _global_script_class_icons={
-"GitAPI": "",
 "ShapeData": ""
 }
 
@@ -44,7 +38,7 @@ window/stretch/aspect="keep"
 
 [gdnative]
 
-singletons=[ "res://git_api.gdnlib" ]
+singletons=[  ]
 
 [rendering]
 
