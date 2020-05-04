@@ -1,2 +1,2 @@
-# tetron
+# Tetron
 A Tetris clone using Godot
