@@ -1,0 +1,212 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://sprites/tile.png" type="Texture" id=3]
+
+[node name="GUI" type="PanelContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 367.0
+margin_bottom = 593.0
+size_flags_horizontal = 0
+
+[node name="Left" type="CenterContainer" parent="HBoxContainer"]
+margin_right = 200.0
+margin_bottom = 586.0
+rect_min_size = Vector2( 200, 0 )
+
+[node name="VBox" type="VBoxContainer" parent="HBoxContainer/Left"]
+margin_left = 29.0
+margin_top = 100.0
+margin_right = 171.0
+margin_bottom = 485.0
+custom_constants/separation = 20
+
+[node name="Statistics" type="GridContainer" parent="HBoxContainer/Left/VBox"]
+margin_right = 142.0
+margin_bottom = 74.0
+custom_constants/vseparation = 6
+custom_constants/hseparation = 10
+columns = 2
+
+[node name="_HighScore" type="Label" parent="HBoxContainer/Left/VBox/Statistics"]
+margin_right = 68.0
+margin_bottom = 14.0
+text = "High score"
+
+[node name="HighScore" type="Label" parent="HBoxContainer/Left/VBox/Statistics"]
+margin_left = 78.0
+margin_right = 142.0
+margin_bottom = 14.0
+text = "88888888"
+
+[node name="_Level" type="Label" parent="HBoxContainer/Left/VBox/Statistics"]
+margin_top = 20.0
+margin_right = 68.0
+margin_bottom = 34.0
+text = "Level"
+
+[node name="Level" type="Label" parent="HBoxContainer/Left/VBox/Statistics"]
+margin_left = 78.0
+margin_top = 20.0
+margin_right = 142.0
+margin_bottom = 34.0
+text = "1"
+
+[node name="_Score" type="Label" parent="HBoxContainer/Left/VBox/Statistics"]
+margin_top = 40.0
+margin_right = 68.0
+margin_bottom = 54.0
+text = "Score"
+
+[node name="Score" type="Label" parent="HBoxContainer/Left/VBox/Statistics"]
+margin_left = 78.0
+margin_top = 40.0
+margin_right = 142.0
+margin_bottom = 54.0
+text = "0"
+
+[node name="_Lines" type="Label" parent="HBoxContainer/Left/VBox/Statistics"]
+margin_top = 60.0
+margin_right = 68.0
+margin_bottom = 74.0
+text = "Lines"
+
+[node name="Lines" type="Label" parent="HBoxContainer/Left/VBox/Statistics"]
+margin_left = 78.0
+margin_top = 60.0
+margin_right = 142.0
+margin_bottom = 74.0
+text = "0"
+
+[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer/Left/VBox"]
+margin_top = 94.0
+margin_right = 142.0
+margin_bottom = 225.0
+
+[node name="NextShape" type="GridContainer" parent="HBoxContainer/Left/VBox/CenterContainer"]
+margin_left = 38.0
+margin_right = 103.0
+margin_bottom = 131.0
+custom_constants/vseparation = 1
+custom_constants/hseparation = 1
+columns = 2
+
+[node name="Cell" type="TextureRect" parent="HBoxContainer/Left/VBox/CenterContainer/NextShape"]
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 3 )
+
+[node name="Cell2" type="TextureRect" parent="HBoxContainer/Left/VBox/CenterContainer/NextShape"]
+margin_left = 33.0
+margin_right = 65.0
+margin_bottom = 32.0
+texture = ExtResource( 3 )
+
+[node name="Cell3" type="TextureRect" parent="HBoxContainer/Left/VBox/CenterContainer/NextShape"]
+margin_top = 33.0
+margin_right = 32.0
+margin_bottom = 65.0
+texture = ExtResource( 3 )
+
+[node name="Cell4" type="TextureRect" parent="HBoxContainer/Left/VBox/CenterContainer/NextShape"]
+margin_left = 33.0
+margin_top = 33.0
+margin_right = 65.0
+margin_bottom = 65.0
+texture = ExtResource( 3 )
+
+[node name="Cell5" type="TextureRect" parent="HBoxContainer/Left/VBox/CenterContainer/NextShape"]
+margin_top = 66.0
+margin_right = 32.0
+margin_bottom = 98.0
+texture = ExtResource( 3 )
+
+[node name="Cell6" type="TextureRect" parent="HBoxContainer/Left/VBox/CenterContainer/NextShape"]
+margin_left = 33.0
+margin_top = 66.0
+margin_right = 65.0
+margin_bottom = 98.0
+texture = ExtResource( 3 )
+
+[node name="Cell7" type="TextureRect" parent="HBoxContainer/Left/VBox/CenterContainer/NextShape"]
+margin_top = 99.0
+margin_right = 32.0
+margin_bottom = 131.0
+texture = ExtResource( 3 )
+
+[node name="Cell8" type="TextureRect" parent="HBoxContainer/Left/VBox/CenterContainer/NextShape"]
+margin_left = 33.0
+margin_top = 99.0
+margin_right = 65.0
+margin_bottom = 131.0
+texture = ExtResource( 3 )
+
+[node name="NewGame" type="Button" parent="HBoxContainer/Left/VBox"]
+margin_top = 245.0
+margin_right = 142.0
+margin_bottom = 265.0
+text = "New Game"
+
+[node name="Pause" type="Button" parent="HBoxContainer/Left/VBox"]
+margin_top = 285.0
+margin_right = 142.0
+margin_bottom = 305.0
+text = "Pause"
+
+[node name="Music" type="Button" parent="HBoxContainer/Left/VBox"]
+margin_top = 325.0
+margin_right = 142.0
+margin_bottom = 345.0
+text = "Music On/Off"
+
+[node name="About" type="Button" parent="HBoxContainer/Left/VBox"]
+margin_top = 365.0
+margin_right = 142.0
+margin_bottom = 385.0
+text = "About"
+
+[node name="Right" type="MarginContainer" parent="HBoxContainer"]
+margin_left = 204.0
+margin_right = 360.0
+margin_bottom = 586.0
+custom_constants/margin_right = 8
+custom_constants/margin_top = 8
+custom_constants/margin_left = 8
+custom_constants/margin_bottom = 8
+
+[node name="Grid" type="GridContainer" parent="HBoxContainer/Right"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 148.0
+margin_bottom = 578.0
+columns = 10
+
+[node name="Cell" type="TextureRect" parent="HBoxContainer/Right/Grid"]
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 3 )
+
+[node name="Cell2" type="TextureRect" parent="HBoxContainer/Right/Grid"]
+margin_left = 36.0
+margin_right = 68.0
+margin_bottom = 32.0
+texture = ExtResource( 3 )
+
+[node name="Cell3" type="TextureRect" parent="HBoxContainer/Right/Grid"]
+margin_left = 72.0
+margin_right = 104.0
+margin_bottom = 32.0
+texture = ExtResource( 3 )
+
+[node name="Cell4" type="TextureRect" parent="HBoxContainer/Right/Grid"]
+margin_left = 108.0
+margin_right = 140.0
+margin_bottom = 32.0
+texture = ExtResource( 3 )
