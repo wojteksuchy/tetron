@@ -24,6 +24,10 @@ config/name="Tetron"
 run/main_scene="res://scenes/Main.tscn"
 config/icon="res://icon.png"
 
+[audio]
+
+default_bus_layout=""
+
 [autoload]
 
 Shapes="*res://scenes/Shapes.tscn"

@@ -3,8 +3,9 @@ extends CenterContainer
 const CELL_CLEAR_BACKGROUND1 := Color(0.1, 0.1, 0.1)
 const CELL_CLEAR_BACKGROUND2 := Color(0) #Black
 
-var music := 0
-var sound := 0
+var music := -20
+var sound := -20
+var min_volume
 
 var grid: GridContainer
 var next: GridContainer
@@ -16,7 +17,8 @@ signal button_pressed(button_name)
 func _ready() -> void:
 	grid = find_node("Grid")
 	next = find_node("NextShape")
-
+	min_volume = find_node("Music").get_min()
+	find_node("Sound").set_min(min_volume)
 	add_cells(grid, number_of_cells)
 	clear_cells(grid, CELL_CLEAR_BACKGROUND1)
 	clear_cells(next, CELL_CLEAR_BACKGROUND2)
