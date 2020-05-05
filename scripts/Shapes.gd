@@ -18,8 +18,7 @@ func _ready() -> void:
 		#print(data.coordinates)
 		data.grid = _get_grid(size, shape.get_children())
 		_shapes.append(data)
-		
-		
+
 
 func get_shape() -> ShapeData:
 	if _index == 0:
@@ -31,7 +30,6 @@ func get_shape() -> ShapeData:
 	shape_data.color = _shapes[_index].color
 	shape_data.coordinates = _shapes[_index].coordinates
 	shape_data.grid = _shapes[_index].grid
-	
 	return shape_data
 
 
