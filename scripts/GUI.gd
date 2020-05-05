@@ -3,8 +3,8 @@ extends CenterContainer
 const CELL_CLEAR_BACKGROUND1 := Color(0.1, 0.1, 0.1)
 const CELL_CLEAR_BACKGROUND2 := Color(0) #Black
 
-var music := 0.0
-var sound := 0.0
+var music := 0
+var sound := 0
 
 var grid: GridContainer
 var next: GridContainer
