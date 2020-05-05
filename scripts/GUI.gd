@@ -3,6 +3,9 @@ extends CenterContainer
 const CELL_CLEAR_BACKGROUND1 := Color(0.1, 0.1, 0.1)
 const CELL_CLEAR_BACKGROUND2 := Color(0) #Black
 
+var music setget _music_set, _music_get
+var sound setget _sound_set, _sound_get
+
 var grid: GridContainer
 var next: GridContainer
 var number_of_cells := 200
@@ -13,7 +16,7 @@ signal button_pressed(button_name)
 func _ready() -> void:
 	grid = find_node("Grid")
 	next = find_node("NextShape")
-	
+
 	add_cells(grid, number_of_cells)
 	clear_cells(grid, CELL_CLEAR_BACKGROUND1)
 	clear_cells(next, CELL_CLEAR_BACKGROUND2)
@@ -23,6 +26,7 @@ func add_cells(grid_node: GridContainer, how_many_cells: int ) -> void:
 	while number_cells < how_many_cells:
 		grid_node.add_child(grid_node.get_child(0).duplicate())
 		number_cells += 1
+
 
 func clear_cells(grid_node: GridContainer, color: Color) -> void:
 	for cell in grid_node.get_children():
@@ -37,11 +41,26 @@ func set_button_text(button: String, text: String) -> void:
 	find_node(button).set_text(text)
 
 
+func _music_set(value) -> void:
+	find_node("Music").set_text(value)
+
+
+func _music_get() -> bool:
+	return find_node("Music").is_pressed()
+
+
+func _sound_set(value) -> void:
+	find_node("Sound").set_text(value)
+
+
+func _sound_get() -> bool:
+	return find_node("Sound").is_pressed()
+
+
 func set_button_states(playing: bool) -> void:
 	set_button_state("NewGame", playing)
 	set_button_state("About", playing)
 	set_button_state("Pause", !playing)
-	
 
 
 func _on_NewGame_button_down() -> void:
@@ -52,10 +71,6 @@ func _on_Pause_button_down() -> void:
 	emit_signal("button_pressed", "Pause")
 
 
-func _on_Music_button_down() -> void:
-	emit_signal("button_pressed", "Music")
-
-
 func _on_About_button_down() -> void:
 	$AboutBox.popup_centered()
 	emit_signal("button_pressed", "About")
@@ -64,3 +79,11 @@ func _on_About_button_down() -> void:
 
 func _on_AboutBox_popup_hide() -> void:
 	set_button_state("About", false)
+
+
+func _on_Music_pressed() -> void:
+	emit_signal("button_pressed", "Music")
+
+
+func _on_Sound_pressed() -> void:
+	emit_signal("button_pressed", "Sound")
