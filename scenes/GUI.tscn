@@ -13,26 +13,26 @@ __meta__ = {
 
 [node name="Panel" type="PanelContainer" parent="."]
 margin_left = 113.0
-margin_top = 272.0
+margin_top = 296.0
 margin_right = 487.0
-margin_bottom = 751.0
+margin_bottom = 727.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 367.0
-margin_bottom = 472.0
+margin_bottom = 424.0
 size_flags_horizontal = 0
 
 [node name="Left" type="CenterContainer" parent="Panel/HBoxContainer"]
 margin_right = 200.0
-margin_bottom = 465.0
+margin_bottom = 417.0
 rect_min_size = Vector2( 200, 0 )
 
 [node name="VBox" type="VBoxContainer" parent="Panel/HBoxContainer/Left"]
 margin_left = 29.0
 margin_right = 171.0
-margin_bottom = 465.0
+margin_bottom = 417.0
 custom_constants/separation = 20
 
 [node name="Statistics" type="GridContainer" parent="Panel/HBoxContainer/Left/VBox"]
@@ -167,28 +167,63 @@ margin_right = 142.0
 margin_bottom = 305.0
 text = "Pause"
 
-[node name="Music" type="CheckButton" parent="Panel/HBoxContainer/Left/VBox"]
+[node name="HBox" type="HBoxContainer" parent="Panel/HBoxContainer/Left/VBox"]
 margin_top = 325.0
 margin_right = 142.0
-margin_bottom = 365.0
-text = "Music"
+margin_bottom = 341.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Sound" type="CheckButton" parent="Panel/HBoxContainer/Left/VBox"]
-margin_top = 385.0
+[node name="MusicLabel" type="Label" parent="Panel/HBoxContainer/Left/VBox/HBox"]
+margin_top = 1.0
+margin_right = 38.0
+margin_bottom = 15.0
+text = "Music"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Music" type="HSlider" parent="Panel/HBoxContainer/Left/VBox/HBox"]
+margin_left = 42.0
 margin_right = 142.0
-margin_bottom = 425.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+min_value = -24.0
+max_value = 0.0
+
+[node name="HBox2" type="HBoxContainer" parent="Panel/HBoxContainer/Left/VBox"]
+margin_top = 361.0
+margin_right = 142.0
+margin_bottom = 377.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SoundLabel" type="Label" parent="Panel/HBoxContainer/Left/VBox/HBox2"]
+margin_top = 1.0
+margin_right = 39.0
+margin_bottom = 15.0
 text = "Sound"
 
-[node name="About" type="Button" parent="Panel/HBoxContainer/Left/VBox"]
-margin_top = 445.0
+[node name="Sound" type="HSlider" parent="Panel/HBoxContainer/Left/VBox/HBox2"]
+margin_left = 43.0
 margin_right = 142.0
-margin_bottom = 465.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+min_value = -24.0
+max_value = 0.0
+
+[node name="About" type="Button" parent="Panel/HBoxContainer/Left/VBox"]
+margin_top = 397.0
+margin_right = 142.0
+margin_bottom = 417.0
 text = "About"
 
 [node name="Right" type="MarginContainer" parent="Panel/HBoxContainer"]
 margin_left = 204.0
 margin_right = 360.0
-margin_bottom = 465.0
+margin_bottom = 417.0
 custom_constants/margin_right = 8
 custom_constants/margin_top = 8
 custom_constants/margin_left = 8
@@ -198,7 +233,7 @@ custom_constants/margin_bottom = 8
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 148.0
-margin_bottom = 457.0
+margin_bottom = 409.0
 columns = 10
 
 [node name="Cell" type="TextureRect" parent="Panel/HBoxContainer/Right/Grid"]
@@ -240,7 +275,7 @@ Shift + Up arrow - rotate anti-clockwise
 Page Up - increase level on each press"
 [connection signal="button_down" from="Panel/HBoxContainer/Left/VBox/NewGame" to="." method="_on_NewGame_button_down"]
 [connection signal="button_down" from="Panel/HBoxContainer/Left/VBox/Pause" to="." method="_on_Pause_button_down"]
-[connection signal="pressed" from="Panel/HBoxContainer/Left/VBox/Music" to="." method="_on_Music_pressed"]
-[connection signal="pressed" from="Panel/HBoxContainer/Left/VBox/Sound" to="." method="_on_Sound_pressed"]
+[connection signal="value_changed" from="Panel/HBoxContainer/Left/VBox/HBox/Music" to="." method="_on_Music_value_changed"]
+[connection signal="value_changed" from="Panel/HBoxContainer/Left/VBox/HBox2/Sound" to="." method="_on_Sound_value_changed"]
 [connection signal="button_down" from="Panel/HBoxContainer/Left/VBox/About" to="." method="_on_About_button_down"]
 [connection signal="popup_hide" from="AboutBox" to="." method="_on_AboutBox_popup_hide"]

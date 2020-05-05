@@ -3,8 +3,8 @@ extends CenterContainer
 const CELL_CLEAR_BACKGROUND1 := Color(0.1, 0.1, 0.1)
 const CELL_CLEAR_BACKGROUND2 := Color(0) #Black
 
-var music setget _music_set, _music_get
-var sound setget _sound_set, _sound_get
+var music := 0.0
+var sound := 0.0
 
 var grid: GridContainer
 var next: GridContainer
@@ -41,22 +41,6 @@ func set_button_text(button: String, text: String) -> void:
 	find_node(button).set_text(text)
 
 
-func _music_set(value) -> void:
-	find_node("Music").set_text(value)
-
-
-func _music_get() -> bool:
-	return find_node("Music").is_pressed()
-
-
-func _sound_set(value) -> void:
-	find_node("Sound").set_text(value)
-
-
-func _sound_get() -> bool:
-	return find_node("Sound").is_pressed()
-
-
 func set_button_states(playing: bool) -> void:
 	set_button_state("NewGame", playing)
 	set_button_state("About", playing)
@@ -81,9 +65,11 @@ func _on_AboutBox_popup_hide() -> void:
 	set_button_state("About", false)
 
 
-func _on_Music_pressed() -> void:
+func _on_Music_value_changed(value: float) -> void:
+	music = value
 	emit_signal("button_pressed", "Music")
 
 
-func _on_Sound_pressed() -> void:
+func _on_Sound_value_changed(value: float) -> void:
+	sound = value
 	emit_signal("button_pressed", "Sound")
