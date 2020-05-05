@@ -29,6 +29,21 @@ func clear_cells(grid_node: GridContainer, color: Color) -> void:
 		cell.modulate = color
 
 
+func set_button_state(button: String, state: bool) -> void:
+	find_node(button).set_disabled(state)
+
+
+func set_button_text(button: String, text: String) -> void:
+	find_node(button).set_text(text)
+
+
+func set_button_states(playing: bool) -> void:
+	set_button_state("NewGame", playing)
+	set_button_state("About", playing)
+	set_button_state("Pause", !playing)
+	
+
+
 func _on_NewGame_button_down() -> void:
 	emit_signal("button_pressed", "NewGame")
 
@@ -44,4 +59,8 @@ func _on_Music_button_down() -> void:
 func _on_About_button_down() -> void:
 	$AboutBox.popup_centered()
 	emit_signal("button_pressed", "About")
+	set_button_state("About", true)
 
+
+func _on_AboutBox_popup_hide() -> void:
+	set_button_state("About", false)
