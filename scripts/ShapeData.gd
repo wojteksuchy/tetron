@@ -1,4 +1,4 @@
-extends Node
+extends Control
 
 class_name ShapeData
 
@@ -8,11 +8,11 @@ var coordinates: Array #local coordinates
 
 
 func rotate_left() -> void:
-	_rotate_grid(1, -1)
+	_rotate_grid(-1, 1)
 
 
 func rotate_right() -> void:
-	_rotate_grid(-1, 1)
+	_rotate_grid(1, -1)
 
 
 func _rotate_grid(sign_of_x: int, sign_of_y: int) -> void:

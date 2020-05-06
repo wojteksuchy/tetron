@@ -15,7 +15,6 @@ func _ready() -> void:
 		
 		if size % 2 == 0:
 			data.coordinates.remove(s2)
-		#print(data.coordinates)
 		data.grid = _get_grid(size, shape.get_children())
 		_shapes.append(data)
 

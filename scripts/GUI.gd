@@ -19,14 +19,18 @@ func _ready() -> void:
 	min_volume = find_node("Music").get_min()
 	find_node("Sound").set_min(min_volume)
 	add_cells(grid, number_of_cells)
-	clear_cells(grid)
-	clear_cells(next)
+	clear_all_cells()
+	
 
 func add_cells(grid_node: GridContainer, how_many_cells: int ) -> void:
 	var number_cells = grid_node.get_child_count() # how many cells is onready in grid
 	while number_cells < how_many_cells:
 		grid_node.add_child(grid_node.get_child(0).duplicate())
 		number_cells += 1
+
+func clear_all_cells() -> void:
+	clear_cells(grid)
+	clear_cells(next)
 
 
 func clear_cells(grid_node: GridContainer) -> void:

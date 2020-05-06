@@ -1,30 +1,102 @@
 extends CenterContainer
 
 enum states {STOPPED, PLAYING, PAUSED, STOP, PLAY, PAUSE}
+enum directions{ROTATE_LEFT, ROTATE_RIGHT}
+
 
 const DISABLED := true
 const ENABLED := false
 const MIN_AUDIO_LEVEL := -24
 
+var state :int = states.STOPPED
 
 var gui: Node
-var state :int = states.STOPPED
 var music_position := 0.0
-
+var grid := []
+var cols 
+var shape : Object = ShapeData
+var pos := 0 #grid_position
 
 func _ready() -> void:
 	gui = $GUI
 	gui.connect("button_pressed", self, "_button_pressed")
 	gui.set_button_states(ENABLED)
+	cols = gui.grid.get_columns()
 
+
+func clear_grid() -> void:
+	grid.clear()
+	grid.resize(gui.grid.get_child_count())
+	for i in grid.size():
+		grid[i] = false
+	gui.clear_all_cells()
+
+
+func rotate(rotate_direction) -> int:
+	match rotate_direction:
+		directions.ROTATE_LEFT:
+			shape.rotate_left()
+			rotate_direction = directions.ROTATE_RIGHT
+		directions.ROTATE_RIGHT:
+			shape.rotate_right()
+			rotate_direction = directions.ROTATE_LEFT
+	return rotate_direction
+
+
+func move_shape(new_position :int, rotate_direction = null) -> bool:
+	remove_shape_from_grid()
+	# rotate and store undo direction
+	rotate_direction = rotate(rotate_direction)
+	# update position if we can place shape else undo rotation
+	var ok := place_shape(new_position)
+	if ok:
+		pos = new_position
+	else:
+		rotate(rotate_direction)
+	add_shape_to_grid()
+	return ok
+	
+
+func add_shape_to_grid() -> void:
+	place_shape(pos, true, false, shape.color)
+
+
+func remove_shape_from_grid() -> void:
+	place_shape(pos, true)
+
+
+func lock_shape_to_grid() -> void:
+	place_shape(pos, false, true)
+
+
+func place_shape(index : int, add_tiles := false, lock := false, color := Color(0)) -> bool:
+	var ok := true
+	var size = shape.coordinates.size() # size of the shape 
+	var offset = shape.coordinates[0]
+	var y = 0
+	while y < size and ok:
+		for x in size:
+			if shape.grid[x][y]:
+				var grid_position = index + (y + offset) * cols + x + offset
+				if lock:
+					grid[grid_position] = true
+				else:
+					var gx = index % cols + x + offset
+					if gx < 0 or gx >= cols or grid_position >= grid.size() or grid_position >= 0 and grid[grid_position]:
+						ok = !ok
+						break
+					if add_tiles and grid_position >=0:
+						gui.grid.get_child(grid_position).modulate = color
+		y += 1
+	return ok
 
 func _button_pressed(button_name) -> void:
 	match button_name:
 		"NewGame":
 			gui.set_button_states(DISABLED)
 			_start_game()
-			yield(get_tree().create_timer(3.0), "timeout")
-			_game_over()
+			#yield(get_tree().create_timer(3.0), "timeout")
+			#_game_over()
 		"Pause":
 			_pause()
 		"Music":
