@@ -6,6 +6,11 @@ var music := -20
 var sound := -20
 var min_volume
 
+var level = 1 setget set_level
+var score = 0 setget set_score
+var lines = 0 setget set_lines
+var high_score = 0 setget set_high_score
+
 var grid: GridContainer
 var next: GridContainer
 var number_of_cells := 200
@@ -20,7 +25,40 @@ func _ready() -> void:
 	find_node("Sound").set_min(min_volume)
 	add_cells(grid, number_of_cells)
 	clear_all_cells()
-	
+
+
+func set_level(value) -> void:
+	find_node("Level").text = str(value)
+	level = value
+
+
+func set_score(value) -> void:
+	find_node("Score").text = str(value)
+	score = value
+
+
+func set_high_score(value) -> void:
+	find_node("HighScore").text = "%08d" % value
+	high_score = value
+
+
+func set_lines(value) -> void:
+	find_node("Lines").text = str(value)
+	lines = value
+
+
+func reset_stats(_high_score = 0, _score = 0, _lines = 0, _level = 1) -> void:
+	self.high_score = _high_score
+	self.score = _score
+	self.lines = _lines
+	self.level = _level
+
+
+func settings(data) -> void:
+	self.high_score = data.high_score
+	find_node("Music").value = data.music
+	find_node("Sound").value = data.sound
+
 
 func add_cells(grid_node: GridContainer, how_many_cells: int ) -> void:
 	var number_cells = grid_node.get_child_count() # how many cells is onready in grid
