@@ -1,7 +1,6 @@
 extends CenterContainer
 
-const CELL_CLEAR_BACKGROUND1 := Color(0.1, 0.1, 0.1)
-const CELL_CLEAR_BACKGROUND2 := Color(0) #Black
+
 
 var music := -20
 var sound := -20
@@ -20,8 +19,8 @@ func _ready() -> void:
 	min_volume = find_node("Music").get_min()
 	find_node("Sound").set_min(min_volume)
 	add_cells(grid, number_of_cells)
-	clear_cells(grid, CELL_CLEAR_BACKGROUND1)
-	clear_cells(next, CELL_CLEAR_BACKGROUND2)
+	clear_cells(grid)
+	clear_cells(next)
 
 func add_cells(grid_node: GridContainer, how_many_cells: int ) -> void:
 	var number_cells = grid_node.get_child_count() # how many cells is onready in grid
@@ -30,9 +29,9 @@ func add_cells(grid_node: GridContainer, how_many_cells: int ) -> void:
 		number_cells += 1
 
 
-func clear_cells(grid_node: GridContainer, color: Color) -> void:
+func clear_cells(grid_node: GridContainer) -> void:
 	for cell in grid_node.get_children():
-		cell.modulate = color
+		cell.modulate.a = 0.0
 
 
 func set_button_state(button: String, state: bool) -> void:

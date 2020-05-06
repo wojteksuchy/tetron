@@ -12,15 +12,15 @@ __meta__ = {
 }
 
 [node name="Panel" type="PanelContainer" parent="."]
-margin_left = 113.0
+margin_left = 119.0
 margin_top = 296.0
-margin_right = 487.0
+margin_right = 481.0
 margin_bottom = 727.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 367.0
+margin_right = 355.0
 margin_bottom = 424.0
 size_flags_horizontal = 0
 
@@ -224,18 +224,27 @@ text = "About"
 
 [node name="Right" type="MarginContainer" parent="Panel/HBoxContainer"]
 margin_left = 204.0
-margin_right = 360.0
+margin_right = 348.0
 margin_bottom = 417.0
 custom_constants/margin_right = 8
 custom_constants/margin_top = 8
 custom_constants/margin_left = 8
 custom_constants/margin_bottom = 8
 
+[node name="ColorRect" type="ColorRect" parent="Panel/HBoxContainer/Right"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 136.0
+margin_bottom = 409.0
+color = Color( 0, 0, 0, 1 )
+
 [node name="Grid" type="GridContainer" parent="Panel/HBoxContainer/Right"]
 margin_left = 8.0
 margin_top = 8.0
-margin_right = 148.0
+margin_right = 136.0
 margin_bottom = 409.0
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
 columns = 10
 
 [node name="Cell" type="TextureRect" parent="Panel/HBoxContainer/Right/Grid"]
@@ -244,20 +253,20 @@ margin_bottom = 32.0
 texture = ExtResource( 3 )
 
 [node name="Cell2" type="TextureRect" parent="Panel/HBoxContainer/Right/Grid"]
-margin_left = 36.0
-margin_right = 68.0
+margin_left = 32.0
+margin_right = 64.0
 margin_bottom = 32.0
 texture = ExtResource( 3 )
 
 [node name="Cell3" type="TextureRect" parent="Panel/HBoxContainer/Right/Grid"]
-margin_left = 72.0
-margin_right = 104.0
+margin_left = 64.0
+margin_right = 96.0
 margin_bottom = 32.0
 texture = ExtResource( 3 )
 
 [node name="Cell4" type="TextureRect" parent="Panel/HBoxContainer/Right/Grid"]
-margin_left = 108.0
-margin_right = 140.0
+margin_left = 96.0
+margin_right = 128.0
 margin_bottom = 32.0
 texture = ExtResource( 3 )
 

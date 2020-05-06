@@ -4,12 +4,22 @@
 [ext_resource path="res://scripts/Main.gd" type="Script" id=2]
 [ext_resource path="res://audio/lassolady.ogg" type="AudioStream" id=3]
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="CenterContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="GUI" parent="." instance=ExtResource( 1 )]
-margin_right = 374.0
-margin_bottom = 479.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 119.0
+margin_top = 296.0
+margin_right = 481.0
+margin_bottom = 727.0
+size_flags_horizontal = 3
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
