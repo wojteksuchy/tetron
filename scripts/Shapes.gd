@@ -1,7 +1,7 @@
 extends GridContainer
 
-var _shapes := []
-var _index := 0
+var _shapes = []
+var _index = 0
 
 func _ready() -> void:
 	for shape in get_children():
@@ -15,6 +15,7 @@ func _ready() -> void:
 		
 		if size % 2 == 0:
 			data.coordinates.remove(s2)
+		#print(data.coordinates)
 		data.grid = _get_grid(size, shape.get_children())
 		_shapes.append(data)
 
@@ -32,10 +33,10 @@ func get_shape() -> ShapeData:
 	return shape_data
 
 
-func _get_grid(number_of_columns :int, cells :Array) -> Array:
-	var grid := []
-	var row := []
-	var index := 0
+func _get_grid(number_of_columns, cells) -> Array:
+	var grid = []
+	var row = []
+	var index = 0
 	for cell in cells:
 		row.append(cell.modulate.a > 0.1)
 		index += 1

@@ -4,18 +4,25 @@ enum states {STOPPED, PLAYING, PAUSED, STOP, PLAY, PAUSE}
 enum directions{ROTATE_LEFT, ROTATE_RIGHT}
 
 
-const DISABLED := true
-const ENABLED := false
-const MIN_AUDIO_LEVEL := -24
+const DISABLED = true
+const ENABLED = false
+const MIN_AUDIO_LEVEL = -24
+const START_POS = 5
+const END_POS = 25
+const TICK_SPEED = 1.0
+const FAST_MULTIPLE = 10
+const MAX_LEVEL = 100
 
-var state :int = states.STOPPED
+var state  = states.STOPPED
 
-var gui: Node
-var music_position := 0.0
-var grid := []
+var gui 
+var music_position = 0.0
+var grid = []
 var cols 
-var shape : Object = ShapeData
-var pos := 0 #grid_position
+onready var shape: ShapeData
+var next_shape: ShapeData
+var pos = 0 #grid_position
+var count = 0
 
 func _ready() -> void:
 	gui = $GUI
@@ -23,7 +30,7 @@ func _ready() -> void:
 	gui.set_button_states(ENABLED)
 	cols = gui.grid.get_columns()
 	gui.reset_stats()
-	
+	randomize()
 
 
 func clear_grid() -> void:
@@ -32,6 +39,23 @@ func clear_grid() -> void:
 	for i in grid.size():
 		grid[i] = false
 	gui.clear_all_cells()
+
+
+
+
+
+func move_shape(new_position, rotate_direction = null) -> bool:
+	remove_shape_from_grid()
+	# rotate and store undo direction
+	rotate_direction = rotate(rotate_direction)
+	# update position if we can place shape else undo rotation
+	var ok = place_shape(new_position)
+	if ok:
+		pos = new_position
+	else:
+		rotate(rotate_direction)
+	add_shape_to_grid()
+	return ok
 
 
 func rotate(rotate_direction) -> int:
@@ -45,20 +69,6 @@ func rotate(rotate_direction) -> int:
 	return rotate_direction
 
 
-func move_shape(new_position :int, rotate_direction = null) -> bool:
-	remove_shape_from_grid()
-	# rotate and store undo direction
-	rotate_direction = rotate(rotate_direction)
-	# update position if we can place shape else undo rotation
-	var ok := place_shape(new_position)
-	if ok:
-		pos = new_position
-	else:
-		rotate(rotate_direction)
-	add_shape_to_grid()
-	return ok
-	
-
 func add_shape_to_grid() -> void:
 	place_shape(pos, true, false, shape.color)
 
@@ -71,8 +81,8 @@ func lock_shape_to_grid() -> void:
 	place_shape(pos, false, true)
 
 
-func place_shape(index : int, add_tiles := false, lock := false, color := Color(0)) -> bool:
-	var ok := true
+func place_shape(index, add_tiles = false, lock = false, color = Color(0)) -> bool:
+	var ok = true
 	var size = shape.coordinates.size() # size of the shape 
 	var offset = shape.coordinates[0]
 	var y = 0
@@ -123,9 +133,52 @@ func _start_game() -> void:
 	music_position = 0.0
 	if _is_music_on():
 		_music(states.PLAY)
+	clear_grid()
+	gui.reset_stats(gui.high_score)
+	new_shape()
+
+
+func new_shape() -> void:
+	if next_shape:
+		shape = next_shape
+	else:
+		shape = Shapes.get_shape()
+	next_shape = Shapes.get_shape()
+	gui.set_next_shape(next_shape)
+	pos = START_POS
+	add_shape_to_grid()
+	normal_drop()
+	level_up()
+
+
+func level_up() -> void:
+	count += 1
+	if count % 10 == 0:
+		incrase_level()
+
+
+func incrase_level() -> void:
+	if gui.level < MAX_LEVEL:
+		gui.level += 1
+		$Ticker.set_wait_time(TICK_SPEED / gui.level)
+
+
+func normal_drop() -> void:
+	$Ticker.start(TICK_SPEED / gui.level)
+
+
+func soft_drop() -> void:
+	$Ticker.stop()
+	$Ticker.start(TICK_SPEED / gui.level / FAST_MULTIPLE)
+
+
+func hard_drop() -> void:
+	$Ticker.stop()
+	$Ticker.start(TICK_SPEED / MAX_LEVEL)
 
 
 func _game_over() -> void:
+	$Ticker.stop()
 	gui.set_button_states(ENABLED)
 	if _is_music_on():
 		_music(states.STOP)
@@ -146,7 +199,7 @@ func update_high_score() -> void:
 		gui.high_score = gui.score
 
 
-func _music(action: int) -> void:
+func _music(action) -> void:
 	if action == states.PLAY:
 		$MusicPlayer.volume_db = gui.music
 		if !$MusicPlayer.is_playing():
@@ -166,7 +219,7 @@ func _is_sound_on() -> bool:
 	return gui.sound > gui.min_volume
 
 
-func _sound(action: int) -> void:
+func _sound(action) -> void:
 	if action == states.PLAY:
 		print("Sound on. Level: %d", gui.sound)
 	else:

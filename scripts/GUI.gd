@@ -2,8 +2,8 @@ extends CenterContainer
 
 
 
-var music := -20
-var sound := -20
+var music = -20
+var sound = -20
 var min_volume
 
 var level = 1 setget set_level
@@ -13,7 +13,7 @@ var high_score = 0 setget set_high_score
 
 var grid: GridContainer
 var next: GridContainer
-var number_of_cells := 200
+var number_of_cells = 200
 
 
 signal button_pressed(button_name)
@@ -70,7 +70,7 @@ func settings(data) -> void:
 	find_node("Sound").value = data.sound
 
 
-func add_cells(grid_node: GridContainer, how_many_cells: int ) -> void:
+func add_cells(grid_node, how_many_cells) -> void:
 	var number_cells = grid_node.get_child_count() # how many cells is onready in grid
 	while number_cells < how_many_cells:
 		grid_node.add_child(grid_node.get_child(0).duplicate())
@@ -81,16 +81,16 @@ func clear_all_cells() -> void:
 	clear_cells(next)
 
 
-func clear_cells(grid_node: GridContainer) -> void:
+func clear_cells(grid_node) -> void:
 	for cell in grid_node.get_children():
 		cell.modulate.a = 0.0
 
 
-func set_button_state(button: String, state: bool) -> void:
+func set_button_state(button, state) -> void:
 	find_node(button).set_disabled(state)
 
 
-func set_button_text(button: String, text: String) -> void:
+func set_button_text(button, text) -> void:
 	find_node(button).set_text(text)
 
 
@@ -118,11 +118,11 @@ func _on_AboutBox_popup_hide() -> void:
 	set_button_state("About", false)
 
 
-func _on_Music_value_changed(value: float) -> void:
+func _on_Music_value_changed(value) -> void:
 	music = value
 	emit_signal("button_pressed", "Music")
 
 
-func _on_Sound_value_changed(value: float) -> void:
+func _on_Sound_value_changed(value) -> void:
 	sound = value
 	emit_signal("button_pressed", "Sound")

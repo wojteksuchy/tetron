@@ -15,7 +15,7 @@ func rotate_right() -> void:
 	_rotate_grid(1, -1)
 
 
-func _rotate_grid(sign_of_x: int, sign_of_y: int) -> void:
+func _rotate_grid(sign_of_x, sign_of_y) -> void:
 	var rotate_grid = grid.duplicate(true)
 	for x in coordinates:
 		for y in coordinates:
