@@ -12,6 +12,9 @@ const END_POS = 25
 const TICK_SPEED = 1.0
 const FAST_MULTIPLE = 10
 const MAX_LEVEL = 100
+const WAIT_TIME = 0.15
+const REPEAT_DELAY = 0.05
+const FILE_NAME = "user://tetron.json"
 
 var state  = states.STOPPED
 
@@ -19,10 +22,11 @@ var gui
 var music_position = 0.0
 var grid = []
 var cols 
-onready var shape: ShapeData
+var shape: ShapeData
 var next_shape: ShapeData
 var pos = 0 #grid_position
 var count = 0
+var bonus = 0
 
 func _ready() -> void:
 	gui = $GUI
@@ -30,6 +34,7 @@ func _ready() -> void:
 	gui.set_button_states(ENABLED)
 	cols = gui.grid.get_columns()
 	gui.reset_stats()
+	load_game()
 	randomize()
 
 
@@ -88,7 +93,7 @@ func place_shape(index, add_tiles = false, lock = false, color = Color(0)) -> bo
 	var y = 0
 	while y < size and ok:
 		for x in size:
-			if shape.grid[x][y]:
+			if shape.grid[y][x]:
 				var grid_position = index + (y + offset) * cols + x + offset
 				if lock:
 					grid[grid_position] = true
@@ -107,8 +112,6 @@ func _button_pressed(button_name) -> void:
 		"NewGame":
 			gui.set_button_states(DISABLED)
 			_start_game()
-			#yield(get_tree().create_timer(3.0), "timeout")
-			#_game_over()
 		"Pause":
 			_pause()
 		"Music":
@@ -120,6 +123,7 @@ func _button_pressed(button_name) -> void:
 		"Sound":
 			if state == states.PLAYING:
 				if _is_sound_on():
+					$SoundPlayer.volume_db = gui.sound
 					_sound(states.PLAY)
 				else:
 					_sound(states.STOP)
@@ -135,6 +139,7 @@ func _start_game() -> void:
 		_music(states.PLAY)
 	clear_grid()
 	gui.reset_stats(gui.high_score)
+	
 	new_shape()
 
 
@@ -149,6 +154,40 @@ func new_shape() -> void:
 	add_shape_to_grid()
 	normal_drop()
 	level_up()
+
+
+func _input(event: InputEvent) -> void:
+	if state == states.PLAYING:
+		if event.is_action_pressed("ui_page_up"):
+			incrase_level()
+		if event.is_action_pressed("ui_down"):
+			bonus = 2
+			soft_drop()
+		if event.is_action_released("ui_down"):
+			bonus = 0
+			normal_drop()
+		if event.is_action_pressed("ui_accept"):
+			hard_drop()
+		if event.is_action_pressed("ui_left"):
+			move_left()
+			$LeftTimer.start(WAIT_TIME)
+		if event.is_action_released("ui_left"):
+			$LeftTimer.stop()
+		if event.is_action_pressed("ui_right"):
+			move_right()
+			$RightTimer.start(WAIT_TIME)
+		if event.is_action_released("ui_right"):
+			$RightTimer.stop()
+		if event.is_action_pressed("ui_up"):
+			if event.shift:
+				move_shape(pos, directions.ROTATE_RIGHT)
+			else:
+				move_shape(pos, directions.ROTATE_LEFT)
+		if event.is_action_pressed("ui_cancel"):
+			_game_over()
+		if event is InputEventKey:
+			get_tree().set_input_as_handled()
+
 
 
 func level_up() -> void:
@@ -184,6 +223,7 @@ func _game_over() -> void:
 		_music(states.STOP)
 	state = states.STOPPED
 	print("game stopped")
+	save_game()
 
 
 func add_to_score(rows) -> void:
@@ -197,6 +237,16 @@ func add_to_score(rows) -> void:
 func update_high_score() -> void:
 	if gui.score > gui.high_score:
 		gui.high_score = gui.score
+
+
+func move_left() -> void:
+	if pos % cols > 0:
+		move_shape(pos - 1)
+
+
+func move_right() -> void:
+	if pos % cols < cols - 1:
+		move_shape(pos + 1)
 
 
 func _music(action) -> void:
@@ -230,43 +280,111 @@ func _pause() -> void:
 	if state == states.PLAYING:
 		gui.set_button_text("Pause", "Resume")
 		state = states.PAUSED
+		pause_game()
 		if _is_music_on():
 			_music(states.PAUSE)
 	else:
 		gui.set_button_text("Pause", "Pause")
 		state = states.PLAYING
+		pause_game(false)
 		if _is_music_on():
 			_music(states.PLAY)
 
-func _pause_game() -> void:
-	pass
+func pause_game(value = true) -> void:
+	get_tree().paused = value
 
 
+func check_rows() -> void:
+	var i = grid.size() - 1
+	var x = 0
+	var row_number = grid.size() / cols - 1
+	var rows = []
+	while i >= 0:
+		if grid[i]:
+			x += 1
+			i -= 1
+			if x == cols: # complete row found
+				rows.append(row_number)
+				x = 0
+				row_number -= 1
+		else:
+			# empty cell found
+			i += x # set i to right-most column
+			x = 0
+			i -= cols # move i to next row
+			row_number -= 1
+	if rows.empty() == false:
+		remove_rows(rows)
 
 
+func remove_rows(rows) -> void:
+		var rows_moved = 0
+		add_to_score(rows.size())
+		pause_game()
+		if _is_sound_on():
+			$SoundPlayer.play()
+		yield(get_tree().create_timer(0.3), "timeout")
+		pause_game(false)
+		remove_shape_from_grid()
+		for row_count in rows.size():	
+			# Hide cells
+			for n in cols:
+				gui.grid.get_child((rows[row_count] + rows_moved) * cols + n).modulate = Color(0)
+			# Move cells to fill the gap
+			var to = (rows[row_count] + rows_moved) * cols + cols - 1
+			var from = to - cols 
+			while from >= 0:
+				grid[to] = grid[from]
+				gui.grid.get_child(to).modulate = gui.grid.get_child(from).modulate
+				if from == 0: # Clear the top row
+					grid[from] = false
+					gui.grid.get_child(from).modulate = Color(0)
+				from -= 1
+				to -= 1
+			rows_moved += 1
+		add_shape_to_grid()
 
 
+func _on_Ticker_timeout() -> void:
+	var new_position = pos + cols
+	if move_shape(new_position):
+		gui.score += bonus
+		update_high_score()
+	else:
+		if new_position <= END_POS:
+			_game_over()
+		else:
+			lock_shape_to_grid()
+			check_rows()
+			new_shape()
 
 
+func save_game() -> void:
+	var data = {
+		"music": gui.music,
+		"sound": gui.sound,
+		"high_score": gui.high_score
+	}
+	var file = File.new()
+	file.open(FILE_NAME, File.WRITE)
+	file.store_string(to_json(data))
+	file.close()
 
 
+func load_game() -> void:
+	var file = File.new()
+	if file.file_exists(FILE_NAME):
+		file.open(FILE_NAME, File.READ)
+		var data = parse_json(file.get_as_text())
+		gui.settings(data)
+		file.close()
 
 
+func _on_LeftTimer_timeout() -> void:
+	$LeftTimer.wait_time = REPEAT_DELAY
+	move_left()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+func _on_RightTimer_timeout() -> void:
+	$RightTimer.wait_time = REPEAT_DELAY
+	move_right()
