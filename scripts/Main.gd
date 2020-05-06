@@ -22,6 +22,8 @@ func _ready() -> void:
 	gui.connect("button_pressed", self, "_button_pressed")
 	gui.set_button_states(ENABLED)
 	cols = gui.grid.get_columns()
+	gui.reset_stats()
+	
 
 
 func clear_grid() -> void:
@@ -129,6 +131,19 @@ func _game_over() -> void:
 		_music(states.STOP)
 	state = states.STOPPED
 	print("game stopped")
+
+
+func add_to_score(rows) -> void:
+	gui.lines += rows
+	var score = 10 * int(pow(2, rows - 1))
+	print("Added %d to score" % score)
+	gui.score += score
+	update_high_score()
+
+
+func update_high_score() -> void:
+	if gui.score > gui.high_score:
+		gui.high_score = gui.score
 
 
 func _music(action: int) -> void:
