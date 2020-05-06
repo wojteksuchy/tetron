@@ -47,6 +47,16 @@ func set_lines(value) -> void:
 	lines = value
 
 
+func set_next_shape(shape: ShapeData) -> void:
+	clear_cells(next)
+	var i = 0
+	for column in shape.coordinates.size():
+		for row in [0,1]:
+			if shape.grid[row][column]:
+				next.get_child(i).modulate = shape.color
+			i += 1
+
+
 func reset_stats(_high_score = 0, _score = 0, _lines = 0, _level = 1) -> void:
 	self.high_score = _high_score
 	self.score = _score
